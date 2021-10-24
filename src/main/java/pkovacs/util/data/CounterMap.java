@@ -76,6 +76,16 @@ public class CounterMap<K> extends HashMap<K, Long> {
     }
 
     /**
+     * Divides the value associated with {@code key} by {@code factor}, and returns the new value.
+     * If the map did not contain the key, the old value is assumed to be zero.
+     */
+    public long divide(K key, long factor) {
+        long newValue = getValue(key) / factor;
+        put(key, newValue);
+        return newValue;
+    }
+
+    /**
      * Returns a {@link LongStream} view of the values contained in this map.
      */
     public LongStream valueStream() {

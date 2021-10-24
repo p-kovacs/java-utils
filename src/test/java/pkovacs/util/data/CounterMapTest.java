@@ -32,7 +32,8 @@ class CounterMapTest {
 
         assertEquals(11, map.put("okay", 11));
         assertEquals(10, map.dec("okay"));
-        assertEquals(40, map.multiply("okay", 4));
+        assertEquals(120, map.multiply("okay", 12));
+        assertEquals(40, map.divide("okay", 3));
         assertEquals(41, map.inc("okay"));
         assertEquals(42, map.inc("okay"));
 
