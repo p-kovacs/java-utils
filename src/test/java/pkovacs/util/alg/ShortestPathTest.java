@@ -8,10 +8,10 @@ import pkovacs.util.data.Tile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ShortestPathTest {
+class ShortestPathTest {
 
     @Test
-    public void findPathInMaze() throws Exception {
+    void findPathInMaze() throws Exception {
         // We have to find the shortest path in a maze from the top left tile to the bottom right tile.
         // Walls should be bypassed or "blown up", but it takes detonationTime seconds to blow up a single wall
         // tile next to the current tile and step into its location, while a single step to an adjacent empty

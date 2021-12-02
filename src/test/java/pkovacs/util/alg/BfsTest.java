@@ -12,10 +12,10 @@ import pkovacs.util.data.Tile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BfsTest {
+class BfsTest {
 
     @Test
-    public void testSimpleGraph() {
+    void testSimpleGraph() {
         ListMultimap<String, String> graph = MultimapBuilder.hashKeys().arrayListValues().build();
         graph.put("A", "B");
         graph.put("A", "C");
@@ -66,7 +66,7 @@ public class BfsTest {
     }
 
     @Test
-    public void testMaze() throws Exception {
+    void testMaze() throws Exception {
         // We have to find the shortest path in a maze from the top left tile to the bottom right tile.
         // See maze.txt, '#' represents a wall tile, '.' represents an empty tile.
 
@@ -92,7 +92,7 @@ public class BfsTest {
     }
 
     @Test
-    public void testJugs() {
+    void testJugs() {
         // A simple puzzle also featured in the movie "Die Hard 3". :)
         // We have a 3-liter jug, a 5-liter jug, and a fountain. Let's measure 4 liters of water.
         // BFS algorithm can be used for finding the optimal path in an "implicit graph": the nodes represent
@@ -128,7 +128,7 @@ public class BfsTest {
     }
 
     @Test
-    public void testWithInfiniteGraph() {
+    void testWithInfiniteGraph() {
         var result1 = Bfs.findPath(0, i -> List.of(i + 1, 2 * i), i -> i == 128);
         var result2 = Bfs.findPath(0, i -> List.of(i + 1, 2 * i), i -> i == 127);
         var result3 = Bfs.findPath(0, i -> List.of(i + 1, 2 * i), i -> i == 42);

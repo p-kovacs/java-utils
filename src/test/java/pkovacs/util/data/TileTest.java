@@ -9,10 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TileTest {
+class TileTest {
 
     @Test
-    public void test() {
+    void test() {
         var a = new Tile(12, 42);
         var b = new Tile(42, 12);
         var c = new Tile(42, 12);

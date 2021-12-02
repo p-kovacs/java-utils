@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class VectorTest {
+class VectorTest {
 
     @Test
-    public void test2d() {
+    void test2d() {
         var a = Vector.ORIGIN;
         var b = new Vector(42, 12);
 
@@ -60,7 +60,7 @@ public class VectorTest {
     }
 
     @Test
-    public void test3d() {
+    void test3d() {
         var a = Vector.origin(3);
         var b = new Vector(42, 12, 314);
 
@@ -90,7 +90,7 @@ public class VectorTest {
     }
 
     @Test
-    public void testGeneral() {
+    void testGeneral() {
         var a = Vector.origin(12);
         var b = new Vector(new long[] { 0, -1, 2, -3, 4, -5, 6, -7, 8, -9, 10, -11 });
 

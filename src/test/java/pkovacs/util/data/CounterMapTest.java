@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class CounterMapTest {
 
     @Test
-    public void test() {
+    void test() {
         var map = new CounterMap<String>();
 
         assertEquals(0, map.getValue("hello"));

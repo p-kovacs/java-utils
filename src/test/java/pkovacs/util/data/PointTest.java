@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PointTest {
+class PointTest {
 
     @Test
-    public void test() {
+    void test() {
         var a = new Point(42, 12);
         var b = new Point(12, 42);
         var c = new Point(12, 42);

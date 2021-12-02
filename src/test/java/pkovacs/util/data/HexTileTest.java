@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class HexTileTest {
+class HexTileTest {
 
     @Test
-    public void test() {
+    void test() {
         var c = new HexTile(12, 42);
         var d = new HexTile(42, 12);
         var e = new HexTile(42, 12);

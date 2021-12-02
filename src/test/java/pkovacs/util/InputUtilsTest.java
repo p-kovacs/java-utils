@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class InputUtilsTest {
 
     @Test
-    public void testCollectLineBlocks() {
+    void testCollectLineBlocks() {
         String input = "a\nb c d\ne\n\n\n\nf g\nh\n\ni j k";
         var blocks = InputUtils.collectLineBlocks(input);
 
@@ -29,14 +29,14 @@ class InputUtilsTest {
     }
 
     @Test
-    public void testParseIntegers() {
+    void testParseIntegers() {
         String input = "I have 5 apples and 12 bananas. -42 is the opposite of 42.";
         assertArrayEquals(new int[] { 5, 12, -42, 42 }, InputUtils.parseInts(input));
         assertArrayEquals(new long[] { 5, 12, -42, 42 }, InputUtils.parseLongs(input));
     }
 
     @Test
-    public void testScan() {
+    void testScan() {
         var values = InputUtils.scan("Product PID_4242X is ordered.", ".*PID_%d%c is %s[.]");
 
         assertEquals(3, values.size());
