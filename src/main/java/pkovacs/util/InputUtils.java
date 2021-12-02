@@ -86,8 +86,28 @@ public final class InputUtils {
     }
 
     /**
+     * Reads all integers from the given input file as an {@code int} array.
+     * All other characters are ignored.
+     * <p>
+     * For example, if the file contains {@code "I have 5 apples and 12 bananas."}, then {@code {5, 12}} is returned.
+     */
+    public static int[] readInts(Path path) {
+        return parseInts(readString(path));
+    }
+
+    /**
+     * Reads all integers from the given input file as a {@code long} array.
+     * All other characters are ignored.
+     * <p>
+     * For example, if the file contains {@code "I have 5 apples and 12 bananas."}, then {@code {5, 12}} is returned.
+     */
+    public static long[] readLongs(Path path) {
+        return parseLongs(readString(path));
+    }
+
+    /**
      * Parses all integers from the given string and returns them as an {@code int} array.
-     * All other characters are simply ignored.
+     * All other characters are ignored.
      * <p>
      * For example, parsing {@code "I have 5 apples and 12 bananas."} will result in {@code {5, 12}}.
      */
@@ -101,7 +121,7 @@ public final class InputUtils {
 
     /**
      * Parses all integers from the given string and returns them as a {@code long} array.
-     * All other characters are simply ignored.
+     * All other characters are ignored.
      * <p>
      * For example, parsing {@code "I have 5 apples and 12 bananas."} will result in {@code {5, 12}}.
      */
