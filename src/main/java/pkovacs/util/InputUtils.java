@@ -50,9 +50,10 @@ public final class InputUtils {
     }
 
     /**
-     * Reads a single line from the given input file.
+     * Reads the first line from the given input file. This method can be practical if the input is a single line,
+     * and you would like to read it without line breaks (in contrast with {@link #readString(Path)}).
      */
-    public static String readSingleLine(Path path) {
+    public static String readFirstLine(Path path) {
         return readLines(path).get(0);
     }
 
