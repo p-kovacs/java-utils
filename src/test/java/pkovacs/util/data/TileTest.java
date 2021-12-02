@@ -49,7 +49,9 @@ public class TileTest {
                         new Tile(13, 41),
                         new Tile(12, 41),
                         new Tile(11, 41)),
-                a.eightNeighbors());
+                a.extendedNeighbors());
+        assertEquals(List.of(new Tile(11, 42), new Tile(12, 41), new Tile(11, 41)),
+                a.extendedNeighbors(n -> n.row() <= a.row() && n.col() <= a.col()));
 
         assertTrue(a.neighbors().stream().allMatch(n -> Tile.dist(a, n) == 1));
         assertEquals(4, a.validNeighbors(14, 44).size());
@@ -58,8 +60,8 @@ public class TileTest {
         assertEquals(1, a.validNeighbors(13, 42).size());
         assertEquals(0, a.validNeighbors(12, 42).size());
 
-        assertTrue(a.eightNeighbors().stream().allMatch(n -> Tile.dist(a, n) <= 2));
-        assertEquals(12, a.eightNeighbors().stream().mapToInt(a::dist).sum());
+        assertTrue(a.extendedNeighbors().stream().allMatch(n -> Tile.dist(a, n) <= 2));
+        assertEquals(12, a.extendedNeighbors().stream().mapToInt(a::dist).sum());
     }
 
 }

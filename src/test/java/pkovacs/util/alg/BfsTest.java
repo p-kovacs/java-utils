@@ -78,7 +78,7 @@ public class BfsTest {
         var end = new Tile(rowCount - 1, colCount - 1);
 
         var result = Bfs.findPath(start,
-                tile -> tile.validNeighbors(rowCount, colCount, t -> maze[t.row()][t.col()] == '.'),
+                tile -> tile.neighbors(t -> t.isValid(rowCount, colCount) && maze[t.row()][t.col()] == '.'),
                 end::equals);
 
         assertTrue(result.isPresent());

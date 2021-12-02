@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * Represents a tile (cell) in a table as an immutable pair of {@code int} values: row index and column index.
- * Provides methods to get the neighbors of a tile and the Manhattan distance between two tiles.
+ * Represents a tile (or cell) in a table or matrix as an immutable pair of {@code int} values: row index and column
+ * index. Provides methods to get the neighbors of a tile and the Manhattan distance between two tiles.
  * <p>
  * This class is similar to {@link Point} but with different index order and names.
  *
@@ -16,17 +16,16 @@ public record Tile(int row, int col) {
     /**
      * Returns true if the indices of this tile are valid with respect to the given row and column count.
      *
-     * @return true if both indices are between zero (inclusive) and the given count (exclusive).
+     * @return true if the indices are between zero (inclusive) and the given row/column count (exclusive).
      */
     public boolean isValid(int rowCount, int colCount) {
         return row >= 0 && row < rowCount && col >= 0 && col < colCount;
     }
 
     /**
-     * Returns the neighbor in the given direction. The tile {@code (0,0)} represents the upper-left corner
-     * of the table, and {@code (rowCount-1,colCount-1)} represents the bottom-right corner. The directions
-     * are interpreted accordingly, so "up" or "north" means lower row index, while "down" or "south" means higher
-     * row index.
+     * Returns the neighbor in the given direction. The tile {@code (0,0)} represents the upper-left corner among the
+     * tiles with non-negative indices. The directions are interpreted accordingly, so "up" or "north" means lower
+     * row index, while "down" or "south" means higher row index.
      *
      * @param direction the direction. One of 'u' (up), 'd' (down), 'l' (left), 'r' (right),
      *         'n' (north), 's' (south), 'w' (west), 'e' (east), and their uppercase variants.
@@ -55,9 +54,9 @@ public record Tile(int row, int col) {
     }
 
     /**
-     * Returns the neighbors of this tile that are accepted by the given custom predicate.
+     * Returns the neighbors of this tile that are accepted by the given predicate.
      *
-     * @return the selected neighbors in clockwise order (N, E, S, W)
+     * @return the accepted neighbors (at most four tiles) in clockwise order (N, E, S, W)
      */
     public List<Tile> neighbors(Predicate<Tile> predicate) {
         return neighbors().stream().filter(predicate).toList();
@@ -67,29 +66,18 @@ public record Tile(int row, int col) {
      * Returns the {@link #isValid(int, int) valid} neighbors of this tile with respect to the given row count and
      * column count.
      *
-     * @return the valid neighbors in clockwise order (N, E, S, W)
+     * @return the valid neighbors (at most four tiles) in clockwise order (N, E, S, W)
      */
     public List<Tile> validNeighbors(int rowCount, int colCount) {
         return neighbors(t -> t.isValid(rowCount, colCount));
     }
 
     /**
-     * Returns the {@link #isValid(int, int) valid} neighbors of this tile with respect to the given row count,
-     * column count, and custom predicate.
+     * Returns the eight "extended" neighbors of this tile, including the diagonal ones.
      *
-     * @return the selected valid neighbors in clockwise order (N, E, S, W)
+     * @return the eight "extended" neighbor tiles in clockwise order (N, NE, E, SE, S, SW, W, NW)
      */
-    public List<Tile> validNeighbors(int rowCount, int colCount, Predicate<Tile> predicate) {
-        return neighbors(t -> t.isValid(rowCount, colCount) && predicate.test(t));
-    }
-
-    /**
-     * Returns the eight tiles that are close to this one: the four neighbors and the four tiles in diagonal
-     * directions.
-     *
-     * @return the eight neighbor tiles (including diagonal directions) in clockwise order (N, NE, E, SE, S, SW, W, NW)
-     */
-    public List<Tile> eightNeighbors() {
+    public List<Tile> extendedNeighbors() {
         return List.of(
                 new Tile(row - 1, col),
                 new Tile(row - 1, col + 1),
@@ -99,6 +87,15 @@ public record Tile(int row, int col) {
                 new Tile(row + 1, col - 1),
                 new Tile(row, col - 1),
                 new Tile(row - 1, col - 1));
+    }
+
+    /**
+     * Returns the "extended" neighbors of this tile that are accepted by the given predicate, including diagonal ones.
+     *
+     * @return the accepted "extended" neighbors (at most eight tiles) in clockwise order (N, NE, E, SE, S, SW, W, NW)
+     */
+    public List<Tile> extendedNeighbors(Predicate<Tile> predicate) {
+        return extendedNeighbors().stream().filter(predicate).toList();
     }
 
     /**

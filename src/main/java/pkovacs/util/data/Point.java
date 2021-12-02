@@ -20,7 +20,7 @@ public record Point(long x, long y) {
      * Returns true if the coordinates of this point are valid with respect to the given width and height
      * of a rectangle.
      *
-     * @return true if both coordinates are between zero (inclusive) and the given width/height (exclusive).
+     * @return true if the coordinates are between zero (inclusive) and the given width/height (exclusive).
      */
     public boolean isValid(long width, long height) {
         return x >= 0 && x < width && y >= 0 && y < height;
@@ -38,7 +38,7 @@ public record Point(long x, long y) {
     }
 
     /**
-     * Returns the neighbors of this point that are accepted by the given custom predicate.
+     * Returns the neighbors of this point that are accepted by the given predicate.
      */
     public Collection<Point> neighbors(Predicate<Point> predicate) {
         return neighbors().stream().filter(predicate).toList();
@@ -50,14 +50,6 @@ public record Point(long x, long y) {
      */
     public Collection<Point> validNeighbors(long width, long height) {
         return neighbors(p -> p.isValid(width, height));
-    }
-
-    /**
-     * Returns the {@link #isValid(long, long) valid} neighbors of this point with respect to the given width,
-     * height, and custom predicate.
-     */
-    public Collection<Point> validNeighbors(long width, long height, Predicate<Point> predicate) {
-        return neighbors(p -> p.isValid(width, height) && predicate.test(p));
     }
 
     /**
