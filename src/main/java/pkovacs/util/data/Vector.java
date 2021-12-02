@@ -1,94 +1,194 @@
 package pkovacs.util.data;
 
-/**
- * Represents a position vector in 2D space as an immutable pair of {@code long} values: x and y coordinates.
- * Provides methods for vector operations (addition, rotation, etc.) and for obtaining the Manhattan distance
- * between two vectors.
- * <p>
- * The coordinates are interpreted as usual in Math: {@code (0,1)} means {@link #NORTH}, {@code (0,-1)} means
- * {@link #SOUTH}, {@code (1,0)} means {@link #EAST}, and {@code (0,1)} means {@link #WEST}. And the {@link #ORIGIN}
- * is {@code (0,0)}.
- *
- * @see Point
- */
-public record Vector(long x, long y) {
+import java.util.Arrays;
+import java.util.function.Function;
 
-    /** The origin vector, {@code (0,0)}. */
+import static java.util.stream.Collectors.joining;
+
+/**
+ * Represents a position vector in D-dimension space as an immutable array of {@code long} coordinates.
+ * Provides methods for vector operations and for obtaining the Manhattan distance between two vectors.
+ * <p>
+ * Some features are specific to 2D vectors, e.g., directions and rotation. The coordinates are interpreted
+ * as usual in Math: (0, 1) means {@link #NORTH}, (0, -1) means {@link #SOUTH}, (1, 0) means {@link #EAST},
+ * (-1, 0) means {@link #WEST}, and (0, 0) is the {@link #ORIGIN}.
+ */
+public class Vector {
+
+    /** The 2D origin vector: (0, 0). For other dimensions, use {@link #origin(int)}. */
     public static final Vector ORIGIN = new Vector(0, 0);
 
-    /** The unit vector with "north" direction, {@code (0,1)}. */
+    /** The 2D unit vector with "north" direction: (0, 1). */
     public static final Vector NORTH = new Vector(0, 1);
 
-    /** The unit vector with "south" direction, {@code (0,-1)}. */
+    /** The 2D unit vector with "south" direction: (0, -1). */
     public static final Vector SOUTH = new Vector(0, -1);
 
-    /** The unit vector with "east" direction, {@code (1,0)}. */
+    /** The 2D unit vector with "east" direction: (1, 0). */
     public static final Vector EAST = new Vector(1, 0);
 
-    /** The unit vector with "west" direction, {@code (-1,0)}. */
+    /** The 2D unit vector with "west" direction: (-1, 0). */
     public static final Vector WEST = new Vector(-1, 0);
+
+    private final long[] coords;
+
+    /**
+     * Creates a 2D vector with the given coordinates.
+     */
+    public Vector(long x, long y) {
+        coords = new long[] { x, y };
+    }
+
+    /**
+     * Creates a 3D vector with the given coordinates.
+     */
+    public Vector(long x, long y, long z) {
+        coords = new long[] { x, y, z };
+    }
+
+    /**
+     * Creates a vector with the given coordinates.
+     */
+    public Vector(long[] coords) {
+        if (coords.length <= 1) {
+            throw new IllegalArgumentException("At least two coordinates are required");
+        }
+        this.coords = coords.clone();
+    }
+
+    /**
+     * Returns the origin vector with the given dimension.
+     */
+    public static Vector origin(int dim) {
+        return new Vector(new long[dim]);
+    }
+
+    /**
+     * Returns the dimension of this vector.
+     */
+    public int dim() {
+        return coords.length;
+    }
+
+    /**
+     * Returns the x coordinate of this vector. It is the same as {@link #get(int) get(0)}.
+     */
+    public long x() {
+        return coords[0];
+    }
+
+    /**
+     * Returns the y coordinate of this vector. It is the same as {@link #get(int) get(1)}.
+     */
+    public long y() {
+        return coords[1];
+    }
+
+    /**
+     * Returns the z coordinate of this vector. It is the same as {@link #get(int) get(2)}.
+     *
+     * @throws IndexOutOfBoundsException if the dimension of this vector is less than three
+     */
+    public long z() {
+        return coords[2];
+    }
+
+    /**
+     * Returns the k-th coordinate of this vector.
+     *
+     * @throws IndexOutOfBoundsException if the dimension of this vector is less than or equal to {@code k}
+     */
+    public long get(int k) {
+        return coords[k];
+    }
+
+    private static void checkSameDimensions(Vector a, Vector b) {
+        if (a.coords.length != b.coords.length) {
+            throw new IllegalArgumentException("Vector dimensions mismatch.");
+        }
+    }
+
+    private Vector newVector(Function<Integer, Long> function) {
+        long newCoords[] = new long[coords.length];
+        for (int i = 0; i < newCoords.length; i++) {
+            newCoords[i] = function.apply(i);
+        }
+        return new Vector(newCoords);
+    }
 
     /**
      * Returns a new vector obtained by adding the given vector to this one.
      */
     public Vector add(Vector v) {
-        return new Vector(x + v.x, y + v.y);
+        checkSameDimensions(this, v);
+        return newVector(i -> coords[i] + v.coords[i]);
     }
 
     /**
      * Returns a new vector obtained by adding the given two vectors.
      */
     public static Vector add(Vector a, Vector b) {
-        return new Vector(a.x + b.x, a.y + b.y);
+        return a.add(b);
     }
 
     /**
      * Returns a new vector obtained by subtracting the given vector from this one.
      */
     public Vector sub(Vector v) {
-        return new Vector(x - v.x, y - v.y);
+        checkSameDimensions(this, v);
+        return newVector(i -> coords[i] - v.coords[i]);
     }
 
     /**
      * Returns a new vector obtained by subtracting the given second vector from the first one.
      */
     public static Vector sub(Vector a, Vector b) {
-        return new Vector(a.x - b.x, a.y - b.y);
+        return a.sub(b);
     }
 
     /**
-     * Returns the negative (opposite) of this vector.
+     * Returns a new vector that is the negative (opposite) of this vector.
      */
-    public Vector neg() {
-        return new Vector(-x, -y);
+    public Vector negative() {
+        return newVector(i -> -coords[i]);
     }
 
     /**
      * Returns a new vector obtained by multiplying this vector by the given scalar factor.
      */
     public Vector multiply(long factor) {
-        return new Vector(x * factor, y * factor);
+        return newVector(i -> factor * coords[i]);
     }
 
     /**
-     * Returns a vector obtained by rotating this vector by 90 degrees to the right.
+     * Returns a new vector obtained by rotating this 2D vector 90 degrees to the right.
+     *
+     * @throws UnsupportedOperationException if the dimension of this vector is larger than two
      */
     public Vector rotateRight() {
-        return new Vector(y, -x);
+        if (dim() != 2) {
+            throw new UnsupportedOperationException("Only supported for 2D vectors.");
+        }
+        return new Vector(y(), -x());
     }
 
     /**
-     * Returns a vector obtained by rotating this vector by 90 degrees to the left.
+     * Returns a new vector obtained by rotating this 2D vector 90 degrees to the left.
+     *
+     * @throws UnsupportedOperationException if the dimension of this vector is larger than two
      */
     public Vector rotateLeft() {
-        return new Vector(-y, x);
+        if (dim() != 2) {
+            throw new UnsupportedOperationException("Only supported for 2D vectors.");
+        }
+        return new Vector(-y(), x());
     }
 
     /**
-     * Returns the Manhattan distance between this vector and the {@link #ORIGIN}.
+     * Returns the Manhattan distance between this vector and the {@link #origin(int) origin}.
      */
     public long dist() {
-        return Math.abs(x) + Math.abs(y);
+        return Arrays.stream(coords).map(Math::abs).sum();
     }
 
     /**
@@ -102,7 +202,29 @@ public record Vector(long x, long y) {
      * Returns the Manhattan distance between the given two vectors.
      */
     public static long dist(Vector a, Vector b) {
-        return sub(a, b).dist();
+        return a.dist(b);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        return Arrays.equals(coords, ((Vector) obj).coords);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(coords);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + Arrays.stream(coords).mapToObj(String::valueOf).collect(joining(", ")) + ")";
     }
 
 }
