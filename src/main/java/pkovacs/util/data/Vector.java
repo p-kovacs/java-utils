@@ -64,6 +64,28 @@ public class Vector {
     }
 
     /**
+     * Returns the 2D unit vector corresponding to the given direction.
+     */
+    public static Vector fromDirection(Direction dir) {
+        return switch (dir) {
+            case NORTH -> Vector.NORTH;
+            case EAST -> Vector.EAST;
+            case SOUTH -> Vector.SOUTH;
+            case WEST -> Vector.WEST;
+        };
+    }
+
+    /**
+     * Returns the 2D unit vector corresponding to the given direction character.
+     *
+     * @param dir the direction character. One of 'N' (north), 'E' (east), 'S' (south), 'W' (west),
+     *         'U' (up), 'R' (right), 'D' (down), 'L' (left), and their lowercase variants.
+     */
+    public static Vector fromChar(char dir) {
+        return fromDirection(Direction.fromChar(dir));
+    }
+
+    /**
      * Returns the dimension of this vector.
      */
     public int dim() {

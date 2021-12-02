@@ -35,10 +35,20 @@ public class TileTest {
         assertEquals(List.of(new Tile(11, 42), new Tile(12, 41)),
                 a.neighbors(n -> n.row() <= a.row() && n.col() <= a.col()));
 
+        assertEquals(new Tile(11, 42), a.neighbor(Direction.NORTH));
+        assertEquals(new Tile(12, 43), a.neighbor(Direction.EAST));
+        assertEquals(new Tile(13, 42), a.neighbor(Direction.SOUTH));
+        assertEquals(new Tile(12, 41), a.neighbor(Direction.WEST));
+
         assertEquals(new Tile(11, 42), a.neighbor('n'));
-        assertEquals(new Tile(13, 42), a.neighbor('s'));
         assertEquals(new Tile(12, 43), a.neighbor('E'));
+        assertEquals(new Tile(13, 42), a.neighbor('s'));
         assertEquals(new Tile(12, 41), a.neighbor('W'));
+
+        assertEquals(new Tile(11, 42), a.neighbor('u'));
+        assertEquals(new Tile(12, 43), a.neighbor('R'));
+        assertEquals(new Tile(13, 42), a.neighbor('d'));
+        assertEquals(new Tile(12, 41), a.neighbor('L'));
 
         assertEquals(List.of(
                         new Tile(11, 42),

@@ -50,9 +50,9 @@ public class VectorTest {
         assertEquals(Vector.ORIGIN, Vector.ORIGIN.negative());
         assertEquals(Vector.ORIGIN, Vector.ORIGIN.rotateRight());
         assertEquals(Vector.NORTH, Vector.ORIGIN.add(Vector.NORTH));
-        assertEquals(Vector.SOUTH, Vector.SOUTH.add(Vector.ORIGIN));
-        assertEquals(Vector.EAST, Vector.NORTH.rotateRight());
-        assertEquals(Vector.WEST, Vector.SOUTH.negative().rotateLeft());
+        assertEquals(Vector.SOUTH, Vector.fromDirection(Direction.SOUTH).add(Vector.ORIGIN));
+        assertEquals(Vector.fromChar('R'), Vector.fromChar('n').rotateRight());
+        assertEquals(Vector.fromChar('L'), Vector.fromChar('s').negative().rotateLeft());
 
         assertEquals("(42, 12)", new Vector(42, 12).toString());
         assertEquals("(0, 1)", Vector.NORTH.toString());

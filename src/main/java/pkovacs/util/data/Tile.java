@@ -24,20 +24,28 @@ public record Tile(int row, int col) {
 
     /**
      * Returns the neighbor in the given direction. The tile {@code (0,0)} represents the upper-left corner among the
-     * tiles with non-negative indices. The directions are interpreted accordingly, so "up" or "north" means lower
-     * row index, while "down" or "south" means higher row index.
-     *
-     * @param direction the direction. One of 'u' (up), 'd' (down), 'l' (left), 'r' (right),
-     *         'n' (north), 's' (south), 'w' (west), 'e' (east), and their uppercase variants.
+     * tiles with non-negative indices. The directions are interpreted accordingly, so "north" or "up" means lower
+     * row index, while "south" or "down" means higher row index.
      */
-    public Tile neighbor(char direction) {
-        return switch (direction) {
-            case 'u', 'U', 'n', 'N' -> new Tile(row - 1, col);
-            case 'd', 'D', 's', 'S' -> new Tile(row + 1, col);
-            case 'l', 'L', 'w', 'W' -> new Tile(row, col - 1);
-            case 'r', 'R', 'e', 'E' -> new Tile(row, col + 1);
-            default -> throw new IllegalArgumentException("Unknown direction: '" + direction + "'.");
+    public Tile neighbor(Direction dir) {
+        return switch (dir) {
+            case NORTH -> new Tile(row - 1, col);
+            case EAST -> new Tile(row, col + 1);
+            case SOUTH -> new Tile(row + 1, col);
+            case WEST -> new Tile(row, col - 1);
         };
+    }
+
+    /**
+     * Returns the neighbor in the given direction. The tile {@code (0,0)} represents the upper-left corner among the
+     * tiles with non-negative indices. The directions are interpreted accordingly, so "north" or "up" means lower
+     * row index, while "south" or "down" means higher row index.
+     *
+     * @param dir the direction. One of 'N' (north), 'E' (east), 'S' (south), 'W' (west),
+     *         'U' (up), 'R' (right), 'D' (down), 'L' (left), and their lowercase variants.
+     */
+    public Tile neighbor(char dir) {
+        return neighbor(Direction.fromChar(dir));
     }
 
     /**
