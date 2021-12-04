@@ -169,15 +169,11 @@ public final class InputUtils {
      *
      * @param str input string
      * @param pattern pattern string: a RegEx that may contain "%d", "%c", "%s", but must not contain capturing
-     *         groups (unescaped '(' and ')')
+     *         groups (unescaped '(' and ')'). For example, "Product %s: .* %d out of %d".
      * @return the list of {@link ParsedValue} objects, which can be obtained as int, long, char, or String
      */
     public static List<ParsedValue> scan(String str, String pattern) throws IllegalArgumentException {
-        var groupFinder = Pattern.compile("%.").matcher(pattern);
-        var groupPatterns = new ArrayList<String>();
-        while (groupFinder.find()) {
-            groupPatterns.add(groupFinder.group());
-        }
+        var groupPatterns = RegexUtils.findAll("%.", pattern);
 
         var regex = pattern.replaceAll("%d", "(\\\\d+)")
                 .replaceAll("%c", "(.)")
@@ -188,9 +184,8 @@ public final class InputUtils {
         if (matcher.matches()) {
             if (matcher.groupCount() == groupPatterns.size()) {
                 for (int i = 0; i < groupPatterns.size(); i++) {
-                    var groupPattern = groupPatterns.get(i);
                     var group = matcher.group(i + 1); // 0-th group is the entire match
-                    result.add(ParsedValue.parse(group, groupPattern));
+                    result.add(ParsedValue.parse(group, groupPatterns.get(i)));
                 }
             } else {
                 throw new IllegalArgumentException(String.format(
