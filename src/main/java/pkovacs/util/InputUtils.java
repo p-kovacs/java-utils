@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+import com.google.common.primitives.Chars;
 
 /**
  * Provides simple utility methods for processing strings and text files.
@@ -140,6 +143,20 @@ public final class InputUtils {
         return Arrays.stream(input.split("\r?\n(\r?\n)+"))
                 .map(block -> List.of(block.split("\r?\n")))
                 .toList();
+    }
+
+    /**
+     * Returns the characters of the given char sequence as a stream.
+     */
+    public static Stream<Character> stream(CharSequence s) {
+        return stream(s.toString().toCharArray());
+    }
+
+    /**
+     * Returns the elements of the given char array as a stream.
+     */
+    public static Stream<Character> stream(char[] array) {
+        return Chars.asList(array).stream();
     }
 
     /**
