@@ -14,16 +14,14 @@ import java.util.function.Predicate;
 public record Tile(int row, int col) {
 
     /**
-     * Returns true if the indices of this tile are valid with respect to the given row and column count.
-     *
-     * @return true if the indices are between zero (inclusive) and the given row/column count (exclusive).
+     * Returns true the indices of this tile are between zero (inclusive) and the given row/column count (exclusive).
      */
     public boolean isValid(int rowCount, int colCount) {
         return row >= 0 && row < rowCount && col >= 0 && col < colCount;
     }
 
     /**
-     * Returns the neighbor in the given direction. The tile {@code (0,0)} represents the upper-left corner among the
+     * Returns the neighbor in the given direction. The tile (0, 0) represents the upper-left corner among the
      * tiles with non-negative indices. The directions are interpreted accordingly, so "north" or "up" means lower
      * row index, while "south" or "down" means higher row index.
      */
@@ -37,7 +35,7 @@ public record Tile(int row, int col) {
     }
 
     /**
-     * Returns the neighbor in the given direction. The tile {@code (0,0)} represents the upper-left corner among the
+     * Returns the neighbor in the given direction. The tile (0, 0) represents the upper-left corner among the
      * tiles with non-negative indices. The directions are interpreted accordingly, so "north" or "up" means lower
      * row index, while "south" or "down" means higher row index.
      *

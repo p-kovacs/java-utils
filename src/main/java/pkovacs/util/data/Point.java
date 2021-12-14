@@ -17,10 +17,8 @@ import java.util.function.Predicate;
 public record Point(int x, int y) {
 
     /**
-     * Returns true if the coordinates of this point are valid with respect to the given width and height
-     * of a rectangle.
-     *
-     * @return true if the coordinates are between zero (inclusive) and the given width/height (exclusive).
+     * Returns true if the coordinates of this point are between zero (inclusive) and the given width/height
+     * (exclusive).
      */
     public boolean isValid(int width, int height) {
         return x >= 0 && x < width && y >= 0 && y < height;
