@@ -2,6 +2,8 @@ package pkovacs.util.data;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Represents a tile (or cell) in a table or matrix as an immutable pair of {@code int} values: row index and column
@@ -116,6 +118,33 @@ public record Tile(int row, int col) {
      */
     public static int dist(Tile t1, Tile t2) {
         return Math.abs(t1.row - t2.row) + Math.abs(t1.col - t2.col);
+    }
+
+    /**
+     * Returns an ordered stream of valid tiles within the given bounds.
+     * If both arguments are positive, then the first element of the stream will be (0, 0), and the last element
+     * will be (rowCount - 1, colCount - 1). Otherwise, an empty stream is returned.
+     */
+    public static Stream<Tile> stream(int rowCount, int colCount) {
+        return stream(0, 0, rowCount, colCount);
+    }
+
+    /**
+     * Returns an ordered stream of tiles within the given bounds.
+     * If {@code startRow < endRow} and {@code startCol < endCol}, then the first element of the stream will be
+     * (startRow, startCol), and the last element will be (endRow - 1, endCol - 1). Otherwise, an empty stream
+     * is returned.
+     */
+    public static Stream<Tile> stream(int startRow, int startCol, int endRow, int endCol) {
+        int rowCount = endRow - startRow;
+        int colCount = endCol - startCol;
+
+        if (rowCount <= 0 || colCount <= 0) {
+            return Stream.empty();
+        } else {
+            return IntStream.range(0, rowCount * colCount)
+                    .mapToObj(i -> new Tile(startRow + i / colCount, startCol + i % colCount));
+        }
     }
 
 }
