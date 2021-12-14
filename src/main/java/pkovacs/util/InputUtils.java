@@ -80,10 +80,7 @@ public final class InputUtils {
         var lines = readLines(path);
         var matrix = new char[lines.size()][];
         for (int i = 0, n = matrix.length; i < n; i++) {
-            matrix[i] = new char[lines.get(i).length()];
-            for (int j = 0, m = matrix[i].length; j < m; j++) {
-                matrix[i][j] = lines.get(i).charAt(j);
-            }
+            matrix[i] = lines.get(i).toCharArray();
         }
         return matrix;
     }
