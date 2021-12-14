@@ -20,6 +20,7 @@ import java.util.stream.IntStream;
  * If your table is going to be "sparse", then consider using Guava's {@link com.google.common.collect.Table} or a
  * Map structure with {@link Tile} keys instead.
  *
+ * @see CharTable
  * @see Table
  */
 public class IntTable extends AbstractTable<Integer> {

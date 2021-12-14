@@ -3,49 +3,54 @@ package pkovacs.util.data;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import pkovacs.util.InputUtils;
+
 /**
- * Represents a table (or matrix) with fixed number of rows and columns. This class is essentially a wrapper for a
- * {@code T[][]} array that provides various convenient methods to access and modify the data. A cell of the table
- * is identified by a {@link Tile} object or two integer indices. Most methods of this class are defined in the
- * {@link AbstractTable abstract base class}.
+ * Represents a table (or matrix) of {@code char} values with fixed number of rows and columns. This class is
+ * essentially a wrapper for a {@code char[][]} array that provides various convenient methods to access and modify
+ * the data. A cell of the table is identified by a {@link Tile} object or two integer indices.
+ * <p>
+ * This class is the primitive type specialization of {@link Table} for {@code char}. Most methods are defined in
+ * the {@link AbstractTable abstract base class}.
  * <p>
  * The {@code equals} and {@code hashCode} methods rely on deep equality check, and the {@code toString} method
- * provides a formatted result, which can be useful for debugging.
+ * provides a nicely formatted compact result, which can be useful for debugging.
  * <p>
  * If your table is going to be "sparse", then consider using Guava's {@link com.google.common.collect.Table} or a
  * Map structure with {@link Tile} keys instead.
  *
  * @see IntTable
- * @see CharTable
+ * @see Table
  */
-public class Table<T> extends AbstractTable<T> {
+public class CharTable extends AbstractTable<Character> {
 
-    private final Object[][] data;
+    private final char[][] data;
 
     /**
-     * Creates a new table by wrapping the given {@code T[][]} array.
+     * Creates a new table by wrapping the given {@code char[][]} array.
      * The array is used directly, so changes to it are reflected in the table, and vice-versa.
      */
-    public Table(T[][] data) {
+    public CharTable(char[][] data) {
         this.data = data;
     }
 
     /**
-     * Creates a new table with the given number of rows and columns.
-     * The initial value for each cell will be {@code null}.
+     * Creates a new table with the given number of rows and columns and the given initial value.
      */
-    public Table(int rowCount, int colCount) {
-        data = new Object[rowCount][colCount];
+    public CharTable(int rowCount, int colCount, char initialValue) {
+        data = new char[rowCount][colCount];
+        Arrays.stream(data).forEach(rowData -> Arrays.fill(rowData, initialValue));
     }
 
     /**
      * Creates a new table with the given number of rows and columns, and calculates initial values by applying
      * the given function to the row and column indices of each cell.
      */
-    public Table(int rowCount, int colCount, BiFunction<Integer, Integer, ? extends T> function) {
-        data = new Object[rowCount][colCount];
+    public CharTable(int rowCount, int colCount, BiFunction<Integer, Integer, Character> function) {
+        data = new char[rowCount][colCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < colCount; j++) {
                 data[i][j] = function.apply(i, j);
@@ -56,8 +61,8 @@ public class Table<T> extends AbstractTable<T> {
     /**
      * Creates a new table as a copy of the given table.
      */
-    public Table(Table<? extends T> other) {
-        data = new Object[other.data.length][];
+    public CharTable(CharTable other) {
+        data = new char[other.data.length][];
         for (int i = 0; i < data.length; i++) {
             data[i] = other.data[i].clone();
         }
@@ -74,77 +79,84 @@ public class Table<T> extends AbstractTable<T> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    T get0(int row, int col) {
-        return (T) data[row][col];
+    Character get0(int row, int col) {
+        return data[row][col];
     }
 
     @Override
-    void set0(int row, int col, T value) {
+    void set0(int row, int col, Character value) {
         data[row][col] = value;
+    }
+
+    /**
+     * Returns the {@code char[][]} array that backs this table. Changes to the returned array are reflected in the
+     * table, and vice-versa.
+     */
+    public char[][] asArray() {
+        return data;
     }
 
     /**
      * Returns the value associated with the specified cell.
      */
-    public T get(int row, int col) {
-        return get0(row, col);
+    public char get(int row, int col) {
+        return data[row][col];
     }
 
     /**
      * Returns the value associated with the specified cell.
      */
-    public T get(Tile cell) {
-        return get0(cell.row(), cell.col());
+    public char get(Tile cell) {
+        return data[cell.row()][cell.col()];
     }
 
     /**
      * Sets the value associated with the specified cell.
      */
-    public void set(int row, int col, T value) {
+    public void set(int row, int col, char value) {
         data[row][col] = value;
     }
 
     /**
      * Sets the value associated with the specified cell.
      */
-    public void set(Tile cell, T value) {
+    public void set(Tile cell, char value) {
         data[cell.row()][cell.col()] = value;
     }
 
     /**
      * Sets all values in this table to the given value.
      */
-    public void fill(T value) {
+    public void fill(char value) {
         Arrays.stream(data).forEach(rowData -> Arrays.fill(rowData, value));
     }
 
     /**
      * Returns an ordered stream of the values contained in the specified row of this table.
      */
-    public Stream<T> rowValues(int i) {
-        return row(i).map(this::get);
+    public Stream<Character> rowValues(int i) {
+        return InputUtils.stream(data[i]);
     }
 
     /**
      * Returns an ordered stream of the values contained in the specified column of this table.
      */
-    public Stream<T> colValues(int j) {
-        return col(j).map(this::get);
+    public Stream<Character> colValues(int j) {
+        return IntStream.range(0, rowCount()).mapToObj(i -> data[i][j]);
     }
 
     /**
      * Returns an ordered stream of all values contained in this table (row by row).
      */
-    public Stream<T> values() {
-        return cells().map(this::get);
+    public Stream<Character> values() {
+        return Arrays.stream(data).flatMap(InputUtils::stream);
     }
 
     /**
      * Returns an ordered stream of the values contained in the given part of this table (row by row).
      * The given lower bounds for row and column indices are inclusive, but the upper bounds are exclusive.
      */
-    public Stream<T> values(int startRow, int startCol, int endRow, int endCol) {
+    public Stream<Character> values(int startRow, int startCol, int endRow, int endCol) {
         return cells(startRow, startCol, endRow, endCol).map(this::get);
     }
 
@@ -157,7 +169,7 @@ public class Table<T> extends AbstractTable<T> {
             return false;
         }
 
-        return Arrays.deepEquals(data, ((Table<?>) obj).data);
+        return Arrays.deepEquals(data, ((CharTable) obj).data);
     }
 
     @Override
@@ -168,9 +180,7 @@ public class Table<T> extends AbstractTable<T> {
     @Override
     public String toString() {
         return Arrays.stream(data)
-                .map(rowData -> Arrays.stream(rowData)
-                        .map(String::valueOf)
-                        .collect(Collectors.joining(" ")))
+                .map(String::new)
                 .collect(Collectors.joining("\n")) + "\n";
     }
 
