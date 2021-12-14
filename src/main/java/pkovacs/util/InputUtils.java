@@ -134,6 +134,15 @@ public final class InputUtils {
     }
 
     /**
+     * Parses the given character as an integer in radix 36. That is, both digits and letters are accepted.
+     * Characters from '0' to '9' are parsed as integers from 0 to 9, while characters from 'a' to 'z' and
+     * from 'A' to 'Z' are parsed as integers from 10 to 35.
+     */
+    public static int parseInt(char c) {
+        return Integer.parseInt(String.valueOf(c), 36);
+    }
+
+    /**
      * Collects blocks of lines (separated by blank line(s)) from the given string.
      */
     public static List<List<String>> collectLineBlocks(String input) {
