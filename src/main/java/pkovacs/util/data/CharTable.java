@@ -88,6 +88,11 @@ public class CharTable extends AbstractTable<Character> {
         data[row][col] = value;
     }
 
+    @Override
+    CharTable newInstance(int rowCount, int colCount, BiFunction<Integer, Integer, Character> function) {
+        return new CharTable(rowCount, colCount, function);
+    }
+
     /**
      * Returns the {@code char[][]} array that backs this table. Changes to the returned array are reflected in the
      * table, and vice-versa.
@@ -158,6 +163,31 @@ public class CharTable extends AbstractTable<Character> {
      */
     public Stream<Character> values(int startRow, int startCol, int endRow, int endCol) {
         return cells(startRow, startCol, endRow, endCol).map(this::get);
+    }
+
+    @Override
+    public CharTable mirrorHorizontally() {
+        return (CharTable) super.mirrorHorizontally();
+    }
+
+    @Override
+    public CharTable mirrorVertically() {
+        return (CharTable) super.mirrorVertically();
+    }
+
+    @Override
+    public CharTable rotateRight() {
+        return (CharTable) super.rotateRight();
+    }
+
+    @Override
+    public CharTable rotateLeft() {
+        return (CharTable) super.rotateLeft();
+    }
+
+    @Override
+    public CharTable transpose() {
+        return (CharTable) super.transpose();
     }
 
     @Override

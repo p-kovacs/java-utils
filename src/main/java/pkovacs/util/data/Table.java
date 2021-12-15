@@ -84,6 +84,11 @@ public class Table<T> extends AbstractTable<T> {
         data[row][col] = value;
     }
 
+    @Override
+    Table<T> newInstance(int rowCount, int colCount, BiFunction<Integer, Integer, T> function) {
+        return new Table<T>(rowCount, colCount, function);
+    }
+
     /**
      * Returns the value associated with the specified cell.
      */
@@ -146,6 +151,31 @@ public class Table<T> extends AbstractTable<T> {
      */
     public Stream<T> values(int startRow, int startCol, int endRow, int endCol) {
         return cells(startRow, startCol, endRow, endCol).map(this::get);
+    }
+
+    @Override
+    public Table<T> mirrorHorizontally() {
+        return (Table<T>) super.mirrorHorizontally();
+    }
+
+    @Override
+    public Table<T> mirrorVertically() {
+        return (Table<T>) super.mirrorVertically();
+    }
+
+    @Override
+    public Table<T> rotateRight() {
+        return (Table<T>) super.rotateRight();
+    }
+
+    @Override
+    public Table<T> rotateLeft() {
+        return (Table<T>) super.rotateLeft();
+    }
+
+    @Override
+    public Table<T> transpose() {
+        return (Table<T>) super.transpose();
     }
 
     @Override

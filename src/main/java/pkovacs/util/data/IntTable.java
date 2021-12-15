@@ -86,6 +86,11 @@ public class IntTable extends AbstractTable<Integer> {
         data[row][col] = value;
     }
 
+    @Override
+    IntTable newInstance(int rowCount, int colCount, BiFunction<Integer, Integer, Integer> function) {
+        return new IntTable(rowCount, colCount, function);
+    }
+
     /**
      * Returns the {@code int[][]} array that backs this table. Changes to the returned array are reflected in the
      * table, and vice-versa.
@@ -191,6 +196,31 @@ public class IntTable extends AbstractTable<Integer> {
      */
     public int max() {
         return values().max().orElseThrow();
+    }
+
+    @Override
+    public IntTable mirrorHorizontally() {
+        return (IntTable) super.mirrorHorizontally();
+    }
+
+    @Override
+    public IntTable mirrorVertically() {
+        return (IntTable) super.mirrorVertically();
+    }
+
+    @Override
+    public IntTable rotateRight() {
+        return (IntTable) super.rotateRight();
+    }
+
+    @Override
+    public IntTable rotateLeft() {
+        return (IntTable) super.rotateLeft();
+    }
+
+    @Override
+    public IntTable transpose() {
+        return (IntTable) super.transpose();
     }
 
     @Override

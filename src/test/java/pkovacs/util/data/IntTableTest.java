@@ -108,6 +108,12 @@ class IntTableTest extends AbstractTableTest<Integer> {
         table3.set(1, 1, 424242);
         assertEquals("     0     -1      2     -3\n  -100 424242   -102    103\n   200   -201    202   -203\n",
                 table3.toString());
+
+        var table4 = createTestTable(3, 4).transpose();
+        var table5 = createTestTable(3, 4).rotateRight();
+
+        assertEquals("  0 100 200\n  1 101 201\n  2 102 202\n  3 103 203\n", table4.toString());
+        assertEquals("200 100   0\n201 101   1\n202 102   2\n203 103   3\n", table5.toString());
     }
 
     private static void assertContentEquals(int[][] expected, IntTable table) {

@@ -34,6 +34,8 @@ public abstract class AbstractTable<T> {
 
     abstract void set0(int row, int col, T value);
 
+    abstract AbstractTable<T> newInstance(int rowCount, int colCount, BiFunction<Integer, Integer, T> function);
+
     /**
      * Returns true if this table contains the given cell.
      */
@@ -117,6 +119,50 @@ public abstract class AbstractTable<T> {
                 set0(i, j, function.apply(get0(i, j)));
             }
         }
+    }
+
+    /**
+     * Mirrors this table horizontally: the row indices remain the same, while column indices are flipped.
+     * A new table is generated and returned, this table is not changed.
+     */
+    public AbstractTable<T> mirrorHorizontally() {
+        int colCount = colCount();
+        return newInstance(rowCount(), colCount, (i, j) -> get0(i, colCount - 1 - j));
+    }
+
+    /**
+     * Mirrors this table vertically: the column indices remain the same, while the row indices are flipped.
+     * A new table is generated and returned, this table is not changed.
+     */
+    public AbstractTable<T> mirrorVertically() {
+        int rowCount = rowCount();
+        return newInstance(rowCount, colCount(), (i, j) -> get0(rowCount - 1 - i, j));
+    }
+
+    /**
+     * Rotates this table to the right (clockwise).
+     * A new table is generated and returned, this table is not changed.
+     */
+    public AbstractTable<T> rotateRight() {
+        int rowCount = rowCount();
+        return newInstance(colCount(), rowCount(), (i, j) -> get0(rowCount - 1 - j, i));
+    }
+
+    /**
+     * Rotates this table to the left (counter-clockwise).
+     * A new table is generated and returned, this table is not changed.
+     */
+    public AbstractTable<T> rotateLeft() {
+        int colCount = colCount();
+        return newInstance(colCount(), rowCount(), (i, j) -> get0(j, colCount - 1 - i));
+    }
+
+    /**
+     * Transposes this table: turns rows into columns and vice versa.
+     * A new table is generated and returned, this table is not changed.
+     */
+    public AbstractTable<T> transpose() {
+        return newInstance(colCount(), rowCount(), (i, j) -> get0(j, i));
     }
 
 }

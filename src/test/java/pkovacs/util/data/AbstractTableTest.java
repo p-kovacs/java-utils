@@ -100,6 +100,40 @@ abstract class AbstractTableTest<T> {
     }
 
     @Test
+    void testTransformations() {
+        var table = createTestTable(3, 4);
+        var transposed = table.transpose();
+        var right = table.rotateRight();
+        var left = table.rotateLeft();
+
+        assertEquals(table.rowCount(), transposed.colCount());
+        assertEquals(table.colCount(), transposed.rowCount());
+        assertEquals(table.rowCount(), right.colCount());
+        assertEquals(table.colCount(), right.rowCount());
+        assertEquals(table.rowCount(), left.colCount());
+        assertEquals(table.colCount(), left.rowCount());
+
+        assertNotEquals(transposed, right);
+        assertNotEquals(transposed, left);
+        assertNotEquals(right, left);
+
+        assertEquals(table, transposed.transpose());
+        assertEquals(table, right.rotateLeft());
+        assertEquals(table, left.rotateRight());
+        assertEquals(table, right.rotateRight().rotateRight().rotateRight());
+        assertEquals(table, left.rotateLeft().rotateLeft().rotateLeft());
+        assertEquals(table, right.rotateRight().mirrorVertically().mirrorHorizontally());
+        assertEquals(table, left.rotateLeft().mirrorVertically().mirrorHorizontally());
+
+        assertEquals(right.rotateRight(), left.rotateLeft());
+
+        assertEquals(transposed, right.mirrorHorizontally());
+        assertEquals(transposed, left.mirrorVertically());
+        assertEquals(transposed, table.mirrorVertically().rotateRight());
+        assertEquals(transposed, table.mirrorHorizontally().rotateLeft());
+    }
+
+    @Test
     void testEqualsAndHashCode() {
         var table1 = createTestTable(3, 4);
         var table2 = createTestTable(3, 4);
