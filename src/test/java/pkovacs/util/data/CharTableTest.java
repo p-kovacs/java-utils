@@ -35,6 +35,8 @@ class CharTableTest extends AbstractTableTest<Character> {
         table.fill('x');
 
         assertContentEquals(List.of("xxxx", "xxxx", "xxxx"), table);
+
+        assertContentEquals(List.of("123", "abc", "def", "xyz"), new CharTable(List.of("123", "abc", "def", "xyz")));
     }
 
     @Test

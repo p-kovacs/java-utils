@@ -1,6 +1,7 @@
 package pkovacs.util.data;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -39,6 +40,14 @@ public class CharTable extends AbstractTable<Character> {
             throw new IllegalArgumentException("Rows must have the same length.");
         }
         this.data = data;
+    }
+
+    /**
+     * Creates a new table from a list of strings. The rows of the table will represent the strings in the list,
+     * which must have the same length.
+     */
+    public CharTable(List<String> data) {
+        this(data.stream().map(String::toCharArray).toArray(char[][]::new));
     }
 
     /**

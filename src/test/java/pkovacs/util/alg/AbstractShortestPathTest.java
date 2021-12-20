@@ -50,7 +50,7 @@ abstract class AbstractShortestPathTest {
         // tile takes only 1 second.
         // See maze.txt, '#' represents a wall tile, '.' represents an empty tile.
 
-        var input = InputUtils.readCharMatrix(InputUtils.getPath(getClass(), "maze.txt"));
+        var input = InputUtils.readLines(InputUtils.getPath(getClass(), "maze.txt"));
         var maze = new CharTable(input);
         var start = new Tile(0, 0);
         var end = new Tile(maze.rowCount() - 1, maze.colCount() - 1);
