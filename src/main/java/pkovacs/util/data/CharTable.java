@@ -32,8 +32,12 @@ public class CharTable extends AbstractTable<Character> {
     /**
      * Creates a new table by wrapping the given {@code char[][]} array.
      * The array is used directly, so changes to it are reflected in the table, and vice-versa.
+     * The "rows" of the given matrix must have the same length.
      */
     public CharTable(char[][] data) {
+        if (IntStream.range(1, data.length).anyMatch(i -> data[i].length != data[0].length)) {
+            throw new IllegalArgumentException("Rows must have the same length.");
+        }
         this.data = data;
     }
 

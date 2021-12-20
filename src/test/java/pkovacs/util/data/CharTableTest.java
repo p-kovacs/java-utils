@@ -7,6 +7,7 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CharTableTest extends AbstractTableTest<Character> {
@@ -34,6 +35,22 @@ class CharTableTest extends AbstractTableTest<Character> {
         table.fill('x');
 
         assertContentEquals(List.of("xxxx", "xxxx", "xxxx"), table);
+    }
+
+    @Test
+    void testWrappedMatrix() {
+        var matrix = new char[][] { { '0', '1', '2', '3' }, { 'a', 'b', 'c', 'd' }, { 'A', 'B', 'C', 'D' } };
+        var table = new CharTable(matrix);
+
+        assertContentEquals(List.of("0123", "abcd", "ABCD"), table);
+
+        matrix[0][0] = '#';
+        table.set(2, 2, '@');
+
+        assertContentEquals(List.of("#123", "abcd", "AB@D"), table);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new CharTable(new char[][] { { '0', '1' }, { 'a', 'b' }, { 'A', 'B', 'C' } }));
     }
 
     @Test
