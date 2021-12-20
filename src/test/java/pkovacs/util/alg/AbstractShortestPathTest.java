@@ -8,6 +8,8 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.MultimapBuilder;
 import org.junit.jupiter.api.Test;
 import pkovacs.util.InputUtils;
 import pkovacs.util.alg.Dijkstra.Edge;
@@ -24,7 +26,24 @@ abstract class AbstractShortestPathTest {
             Predicate<? super T> targetPredicate);
 
     @Test
-    void findPathInMaze() {
+    void testWithSimpleGraph() {
+        ListMultimap<String, Edge<String>> graph = MultimapBuilder.hashKeys().arrayListValues().build();
+        graph.put("A", new Edge<>("B", 10));
+        graph.put("A", new Edge<>("D", 5));
+        graph.put("B", new Edge<>("C", 1));
+        graph.put("C", new Edge<>("E", 1));
+        graph.put("D", new Edge<>("B", 3));
+        graph.put("D", new Edge<>("C", 9));
+        graph.put("D", new Edge<>("E", 11));
+
+        var result = findPath("A", graph::get, "E"::equals);
+        assertTrue(result.isPresent());
+        assertEquals(10, result.get().dist());
+        assertEquals(List.of("A", "D", "B", "C", "E"), result.get().path());
+    }
+
+    @Test
+    void testWithMaze() {
         // We have to find the shortest path in a maze from the top left tile to the bottom right tile.
         // Walls should be bypassed or "blown up", but it takes detonationTime seconds to blow up a single wall
         // tile next to the current tile and step into its location, while a single step to an adjacent empty
