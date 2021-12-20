@@ -178,6 +178,13 @@ public class CharTable extends AbstractTable<Character> {
         return cells(startRow, startCol, endRow, endCol).map(this::get);
     }
 
+    /**
+     * Returns the count of the given value among all values contained in this table.
+     */
+    public int count(char value) {
+        return (int) values().filter(v -> v == value).count();
+    }
+
     @Override
     public CharTable mirrorHorizontally() {
         return (CharTable) super.mirrorHorizontally();

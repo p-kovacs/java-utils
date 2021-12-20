@@ -202,6 +202,13 @@ public class IntTable extends AbstractTable<Integer> {
         return values().max().orElseThrow();
     }
 
+    /**
+     * Returns the count of the given value among all values contained in this table.
+     */
+    public int count(int value) {
+        return (int) values().filter(v -> v == value).count();
+    }
+
     @Override
     public IntTable mirrorHorizontally() {
         return (IntTable) super.mirrorHorizontally();

@@ -40,10 +40,14 @@ class IntTableTest extends AbstractTableTest<Integer> {
         table.updateAll(v -> v / 2);
 
         assertContentEquals(new int[][] { { 25, 1, 2, 3 }, { 100, 101, 102, 103 }, { 200, 201, -5, 203 } }, table);
+        assertEquals(1, table.count(101));
+        assertEquals(0, table.count(42));
 
         table.fill(42);
 
         assertContentEquals(new int[][] { { 42, 42, 42, 42 }, { 42, 42, 42, 42 }, { 42, 42, 42, 42 } }, table);
+        assertEquals(0, table.count(101));
+        assertEquals(12, table.count(42));
     }
 
     @Test

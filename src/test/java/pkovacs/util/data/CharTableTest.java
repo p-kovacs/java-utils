@@ -31,10 +31,14 @@ class CharTableTest extends AbstractTableTest<Character> {
         table.set(new Tile(2, 2), '@');
 
         assertContentEquals(List.of("#234", "bcde", "BC@E"), table);
+        assertEquals(1, table.count('@'));
+        assertEquals(0, table.count('x'));
 
         table.fill('x');
 
         assertContentEquals(List.of("xxxx", "xxxx", "xxxx"), table);
+        assertEquals(0, table.count('@'));
+        assertEquals(12, table.count('x'));
 
         assertContentEquals(List.of("123", "abc", "def", "xyz"), new CharTable(List.of("123", "abc", "def", "xyz")));
     }
